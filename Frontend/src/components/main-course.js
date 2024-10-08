@@ -6,7 +6,7 @@ const MainCourse = () => {
         <div className='flex flex-col w-[721px]'>
             <div className='flex flex-wrap justify-start'>
 
-                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1'>
+                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1 ml-5'>
                     <img
                         src='img/nasi-goreng.jpeg'
                         alt=''
@@ -24,7 +24,7 @@ const MainCourse = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1 ml-8'>
+                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1 ml-5'>
                     <img
                         src='img/nasi-goreng.jpeg'
                         alt=''
@@ -42,7 +42,7 @@ const MainCourse = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1 ml-8'>
+                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1 ml-5'>
                     <img
                         src='img/nasi-goreng.jpeg'
                         alt=''
@@ -60,7 +60,7 @@ const MainCourse = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1'>
+                <div className='flex flex-col bg-white w-full sm:w-[48%] md:w-[29%] h-auto rounded-lg shadow-lg items-center m-1 ml-5'>
                     <img
                         src='img/nasi-goreng.jpeg'
                         alt=''

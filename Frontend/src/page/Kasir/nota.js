@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../../components/navbar'; // Naik dua level ke src dan kemudian ke components
+import Navbar from '../../components/navbar';
 
 function Nota() {
     return (

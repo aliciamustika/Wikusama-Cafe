@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Sidebar from '../../components/leftsidebar';
+import Sidebar from './leftsidebar';
 import { useNavigate } from 'react-router-dom';
 
 function DaftarTransaksi() {
@@ -7,7 +7,6 @@ function DaftarTransaksi() {
 
     const [orders, setOrders] = useState([
         {
-            id: 1,
             date: '21 September 2024',
             name: 'Charlotte',
             menu: 'Charlatte, Coofcim, Cinnamon Roll, Bakso, Lemon Butter Cookies, Caramel Cheese Cake, Indomie, Nasi Goreng',
@@ -15,7 +14,6 @@ function DaftarTransaksi() {
             paymentStatus: 'Paid',
         },
         {
-            id: 2,
             date: '21 September 2024',
             name: 'Charlotte',
             menu: 'Coffee, Deserts, Main Course',
@@ -23,7 +21,6 @@ function DaftarTransaksi() {
             paymentStatus: 'Paid',
         },
         {
-            id: 3,
             date: '21 September 2024',
             name: 'Charlotte',
             menu: 'Coffee, Deserts, Main Course',
@@ -39,14 +36,11 @@ function DaftarTransaksi() {
                 <h3 className='text-xl font-medium text-white ml-52 py-2'>Daftar Transaksi</h3>
             </div>
             <div className='flex gap-6 bg-white min-h-screen'>
-                <div className="container mx-auto p-4 ml-44">
+                <div className="container mx-auto p-1 ml-48">
                     <table className="table-auto w-full text-sm font-light">
                         <thead>
                             <tr className="border-b-2 border-gray-200">
-                                <th className="px-7 py-3 text-left font-medium text-gray-900 whitespace-nowrap">
-                                    ID
-                                </th>
-                                <th className="px-3 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
+                                <th className="px-7 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
                                     DATE
                                 </th>
                                 <th className="px-4 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
@@ -66,8 +60,7 @@ function DaftarTransaksi() {
                         <tbody>
                             {orders.map((order) => (
                                 <tr key={order.id} className="border-b border-gray-200">
-                                    <td className="px-7 py-4 whitespace-nowrap font-normal">{order.id}</td>
-                                    <td className="px-3 py-4 whitespace-nowrap font-normal">{order.date}</td>
+                                    <td className="px-7 py-4 whitespace-nowrap font-normal">{order.date}</td>
                                     <td className="px-4 py-4 whitespace-nowrap font-normal">{order.name}</td>
                                     <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">
                                         <div className="overflow-hidden overflow-ellipsis">

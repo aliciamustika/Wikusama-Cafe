@@ -34,7 +34,7 @@ function Leftsidebar() {
     ];
 
     return (
-        <div className='bg-white min-h-screen w-50 drop-shadow-xl rounded-r-xl p-5 fixed'>
+        <div className='flex flex-col bg-white min-h-screen w-50 drop-shadow-xl rounded-r-xl p-5 fixed'>
             <h1 className='text-3xl font-bold text-center mt-2'>Wikusama</h1>
             <h1 className='text-3xl font-bold text-center'>Cafe</h1>
             <h3 className='font-bold text-center mt-2'>Cashier</h3>
@@ -55,14 +55,14 @@ function Leftsidebar() {
                         <img
                             src={activeButton === index || isHovered === index ? button.icon.active : button.icon.default}
                             alt={button.name}
-                            className='inline-block w-4 h-4 mr-2'
+                            className='inline-block h-5 mr-2'
                         />
                         {button.name}
                     </Link>
                 ))}
             </div>
 
-            <div className='mt-80 text-sm'>
+            <div className='mt-auto text-sm'>
                 <hr />
                 <Link to='/'>
                     <div className='flex space-x-2 justify-center mt-6'>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Leftsidebar from '../../components/leftsidebar';
+import Leftsidebar from './leftsidebar';
 import Rightsidebar from '../../components/rightsidebar';
 import Coffee from '../../components/coffee';
 import Desserts from '../../components/desserts';
