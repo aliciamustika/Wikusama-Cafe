@@ -1,10 +1,9 @@
 // Mengimpor dependensi yang dibutuhkan
 const express = require('express'); // Express untuk routing dan server
-const { PrismaClient } = require('@prisma/client'); // PrismaClient untuk berinteraksi dengan database
 const auth = require('../middlewares/auth'); // Middleware untuk otentikasi
 const upload = require('../utils/uploadFile'); // Middleware untuk mengupload file
 const router = express.Router(); // Router untuk menangani route Express
-const prisma = new PrismaClient(); // Prisma Client instance untuk query database
+const prisma = require('../utils/db'); // Prisma Client instance untuk query database
 
 /**
  * Endpoint untuk membuat minuman baru.

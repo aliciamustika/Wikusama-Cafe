@@ -2,9 +2,8 @@
 const express = require('express'); // Express untuk routing dan server
 const bcrypt = require('bcryptjs'); // Bcrypt untuk hash password dan validasi
 const jwt = require('jsonwebtoken'); // JWT untuk membuat token otentikasi
-const { PrismaClient } = require('@prisma/client'); // PrismaClient untuk interaksi dengan database
 const router = express.Router(); // Router untuk menangani route Express
-const prisma = new PrismaClient(); // Prisma Client instance untuk query database
+const prisma = require('../utils/db'); // Prisma Client instance untuk query database
 
 /**
  * Endpoint untuk registrasi pengguna baru.
