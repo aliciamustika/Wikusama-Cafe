@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Leftsidebar from "./leftsidebar";
 import DataCoffee from "../../components/dataCoffee";
@@ -6,7 +6,7 @@ import DataSnack from "../../components/dataSnack";
 import DataDesserts from "../../components/dataDesserts";
 import DataMainCourse from "../../components/dataMainCourse";
 
-function DataMakanan() {
+function DataMenu() {
     const [kategori, setKategori] = useState('dataCoffee');
 
     return (
@@ -15,15 +15,15 @@ function DataMakanan() {
 
             {/* Navbar */}
             <div className='flex bg-red-700 min-h-12 justify-between items-center'>
-                <h3 className='text-xl font-medium text-white ml-52 py-2'>Data Makanan</h3>
-                <Link to='/addFood'>
+                <h3 className='text-xl font-medium text-white ml-52 py-2'>Data Menu</h3>
+                <Link to='/addMenu'>
                     <div className='flex flex-row mr-4'>
                         <img
                             src='/img/plus.png'
                             alt='add'
                             className='h-4 mt-1 mr-2'
                         />
-                        <button className='text-white font-semibold text-sm'>Add Food</button>
+                        <button className='text-white font-semibold text-sm'>Add Menu</button>
                     </div>
                 </Link>
             </div>
@@ -84,4 +84,4 @@ function DataMakanan() {
     );
 }
 
-export default DataMakanan;
+export default DataMenu;

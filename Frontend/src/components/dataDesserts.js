@@ -1,35 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 function DataDesserts() {
-    const handleDelete = (id) => {
-        const updatedFoodItems = foodItems.filter(item => item.id !== id);
-        setFoodItems(updatedFoodItems);
-    };
+    const [foods, setFoods] = useState([]);
 
-    const [foodItems, setFoodItems] = useState([
-        {
-            id:1,
-            namaMakanan: 'Tiramisu',
-            deskripsi: 'lapisan biskuit savoiardi yang dicelupkan ke dalam kopi.',
-            harga: 'IDR 0.000',
-            img: 'tiramisu.png',
-        },
-        {
-            id: 2,
-            namaMakanan: 'Cinnamon Roll',
-            deskripsi: 'Mocha Cream Latte expresso, susu panas, cokelat disajikan dengan lapisan krim kocok di atasnya.',
-            harga: 'IDR 0.000',
-            img: 'cinnamonRoll.png',
-        },
-        {
-            id: 3,
-            namaMakanan: 'Croisant Beef',
-            deskripsi: 'Iced Cappuccino dengan expresso yang dicampur dengan susu panas dan foam susu yang lebih tebal.',
-            harga: 'IDR 0.000',
-            img: 'croisant.png',
-        },
-    ]);
+    useEffect(() => {
+        axios.get('https://85c2-180-244-129-91.ngrok-free.app/api/food')
+            .then(response => {
+                console.log(response.data);
+                const filteredFoods = response.data.data.filter(food => food.isDessert);
+                setFoods(filteredFoods);
+            })
+            .catch(error => console.error('Error:', error));
+    }, []);
+
+    const handleDelete = async (id) => {
+        try {
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4NjM0NTY1fQ.Lk4PhwN5jsBSJM5Onq19n1NMdEJh-zq_GGeyEtQXUWk';
+            await axios.delete(`https://85c2-180-244-129-91.ngrok-free.app/api/food/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            setFoods(foods.filter(food => food.id !== id));
+        } catch (error) {
+            console.error('Error deleting food:', error);
+        }
+    };
 
     return (
         <div className='flex gap-6 bg-white min-h-screen'>
@@ -47,7 +46,7 @@ function DataDesserts() {
                                 HARGA
                             </th>
                             <th className="px-3 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
-                                IMG
+                                IMAGE
                             </th>
                             <th className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap">
                                 ACTION
@@ -55,21 +54,30 @@ function DataDesserts() {
                         </tr>
                     </thead>
                     <tbody>
-                        {foodItems.map((food) => (
+                        {foods.map(food => (
                             <tr key={food.id} className="border-b border-gray-200">
-                                <td className="px-7 py-4 whitespace-nowrap font-normal">{food.namaMakanan}</td>
+                                <td className="px-7 py-4 whitespace-nowrap font-normal">
+                                    <Link to={`/editMenu/${food.id}`}>
+                                        {food.name}
+                                    </Link>
+                                </td>
                                 <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">
                                     <div className="overflow-hidden overflow-ellipsis">
-                                        {food.deskripsi}
+                                        {food.details}
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">{food.harga}</td>
-                                <td className="px-3 py-4 whitespace-nowrap font-normal">{food.img}</td>
-                                <td className="px-6 py-4 flex flex-row ml-10">
-                                    <Link to='/editFood'>
+                                <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">IDR {food.price.toLocaleString()}</td>
+                                <td><img
+                                    src={`https://85c2-180-244-129-91.ngrok-free.app/${food.image}`}
+                                    alt={food.name}
+                                    className='w-24 h-20 mt-3 mb-2 rounded-lg'
+                                />
+                                </td>
+                                <td className="flex flex-row mt-9 ml-11">
+                                    <Link to={`/editFood/${food.id}`}>
                                         <img src="/img/pen.png" alt="Edit" className="h-7 mr-3" />
                                     </Link>
-                                    <button onClick={() => handleDelete(food.id)} >
+                                    <button onClick={() => handleDelete(food.id)}>
                                         <img src="/img/bin.png" alt="Delete" className="h-7" />
                                     </button>
                                 </td>

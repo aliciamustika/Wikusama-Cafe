@@ -6,9 +6,38 @@ import Coffee from '../../components/coffee';
 import Desserts from '../../components/desserts';
 import Snack from '../../components/snack';
 import MainCourse from '../../components/main-course';
+import Edit from '../../components/edit';
+import { Routes, Route } from 'react-router-dom';
 
 function Pemesanan() {
   const [kategori, setKategori] = useState('coffee');
+  const [cartItems, setCartItems] = useState([]);
+
+  const [customerData, setCustomerData] = useState({
+    name: 'Charlotte',
+    table: 1,
+    date: '',
+  });
+
+  const handleCustomerUpdate = (newCustomerData) => {
+    setCustomerData(newCustomerData);
+  };
+
+  const addToCart = (newItem) => {
+    setCartItems(prevItems => {
+      const existingItemIndex = prevItems.findIndex(item => item.id === newItem.id);
+      if (existingItemIndex !== -1) {
+        const updatedItems = [...prevItems];
+        updatedItems[existingItemIndex] = {
+          ...updatedItems[existingItemIndex],
+          quantity: (updatedItems[existingItemIndex].quantity || 0) + 1
+        };
+        return updatedItems;
+      }
+      const newItemWithQuantity = { ...newItem, quantity: 1 };
+      return [...prevItems, newItemWithQuantity];
+    });
+  };
 
   return (
     <div className='flex gap-6 bg-gray-100'>
@@ -17,14 +46,22 @@ function Pemesanan() {
 
       {/* body */}
       <div className='flex flex-col ml-56 min-h-screen'>
-        <div className='bg-white w-[500px] rounded-lg h-11 ml-32 mt-7 shadow-lg flex items-center'>
+
+        {/* search bar */}
+        {/* <div className='bg-white w-[500px] rounded-lg h-11 ml-32 mt-7 shadow-lg flex items-center'>
           <img
             src='img/search-icon.png'
             alt='search'
             className='w-5 h-5 ml-3'
           />
-          <input type='search' placeholder='Search here' className='w-full p-3 rounded-lg text-sm outline-none' />
-        </div>
+          <input
+            type='search'
+            placeholder='Search here'
+            className='w-full p-3 rounded-lg text-sm outline-none'
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div> */}
 
         {/* navbar menu body */}
         <div className='flex justify-center mt-7 mb-7'>
@@ -74,14 +111,14 @@ function Pemesanan() {
         </div>
 
         {/* menu bar */}
-        {kategori === 'coffee' && <Coffee />}
-        {kategori === 'desserts' && <Desserts />}
-        {kategori === 'snack' && <Snack />}
-        {kategori === 'main-course' && <MainCourse />}
+        {kategori === 'coffee' && <Coffee addToCart={addToCart} />}
+        {kategori === 'desserts' && <Desserts addToCart={addToCart} />}
+        {kategori === 'snack' && <Snack addToCart={addToCart} />}
+        {kategori === 'main-course' && <MainCourse addToCart={addToCart} />}
       </div>
 
       {/* right sidebar */}
-      <Rightsidebar />
+      <Rightsidebar cartItems={cartItems} setCartItems={setCartItems} customerData={customerData} />
     </div>
   );
 }

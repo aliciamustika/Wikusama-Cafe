@@ -1,35 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 function DataCoffee() {
-    const handleDelete = (id) => {
-        const updatedFoodItems = foodItems.filter(item => item.id !== id);
-        setFoodItems(updatedFoodItems);
-    };
+    const [drinks, setDrinks] = useState([]);
 
-    const [foodItems, setFoodItems] = useState([
-        {
-            id: 1,
-            namaMakanan: 'Charlatte',
-            deskripsi: 'Espresso dengan susu panas dan sedikit foam di atasnya.',
-            harga: 'IDR 0.000',
-            img: 'charlatte.png',
-        },
-        {
-            id: 2,
-            namaMakanan: 'Blufu',
-            deskripsi: 'Mocha Cream Latte expresso, susu panas, cokelat disajikan dengan lapisan krim kocok di atasnya.',
-            harga: 'IDR 0.000',
-            img: 'blufu.png',
-        },
-        {
-            id: 3,
-            namaMakanan: 'Coofmil',
-            deskripsi: 'Iced Cappuccino dengan expresso yang dicampur dengan susu panas dan foam susu yang lebih tebal.',
-            harga: 'IDR 0.000',
-            img: 'coofmil.png',
-        },
-    ]);
+    useEffect(() => {
+        axios.get('https://85c2-180-244-129-91.ngrok-free.app/api/drink')
+            .then(response => {
+                console.log(response.data);
+                const filteredDrinks = response.data.data.filter(drink => drink.isMainCourse);
+                setDrinks(filteredDrinks);
+            })
+            .catch(error => console.error('Error:', error));
+    }, []);
+
+    const handleDelete = async (id) => {
+        try {
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4NjM0NTY1fQ.Lk4PhwN5jsBSJM5Onq19n1NMdEJh-zq_GGeyEtQXUWk';
+            await axios.delete(`https://85c2-180-244-129-91.ngrok-free.app/api/drink/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            setDrinks(drinks.filter(drink => drink.id !== id));
+        } catch (error) {
+            console.error('Error deleting drink:', error);
+        }
+    };
 
     return (
         <div className='flex gap-6 bg-white min-h-screen'>
@@ -55,21 +54,26 @@ function DataCoffee() {
                         </tr>
                     </thead>
                     <tbody>
-                        {foodItems.map((food) => (
-                            <tr key={food.id} className="border-b border-gray-200">
-                                <td className="px-7 py-4 whitespace-nowrap font-normal">{food.namaMakanan}</td>
+                        {drinks.map(drink => (
+                            <tr key={drink.id} className="border-b border-gray-200">
+                                <td className="px-7 py-4 whitespace-nowrap font-normal">{drink.name}</td>
                                 <td className="px-4 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">
                                     <div className="overflow-hidden overflow-ellipsis">
-                                        {food.deskripsi}
+                                        {drink.details}
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">{food.harga}</td>
-                                <td className="px-3 py-4 whitespace-nowrap font-normal">{food.img}</td>
-                                <td className="px-6 py-4 flex flex-row ml-10">
-                                    <Link to='/editFood'>
+                                <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">IDR {drink.price.toLocaleString()}</td>
+                                <td><img
+                                    src={`https://85c2-180-244-129-91.ngrok-free.app/${drink.image}`}
+                                    alt={drink.name}
+                                    className='w-24 h-20 mt-3 mb-2 rounded-lg'
+                                />
+                                </td>
+                                <td className="flex flex-row mt-9 ml-11">
+                                    <Link to={`/editDrink/${drink.id}`}>
                                         <img src="/img/pen.png" alt="Edit" className="h-7 mr-3" />
                                     </Link>
-                                    <button onClick={() => handleDelete(food.id)} >
+                                    <button onClick={() => handleDelete(drink.id)}>
                                         <img src="/img/bin.png" alt="Delete" className="h-7" />
                                     </button>
                                 </td>

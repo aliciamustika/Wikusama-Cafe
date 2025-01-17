@@ -11,12 +11,11 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://ukkcafe.smktelkom-mlg.sch.id/api/login', {
+      const response = await axios.post('https://85c2-180-244-129-91.ngrok-free.app/api/auth/login', {
         "username": username,
         "password": password
       }, {
         headers: {
-          "makerID": "53",
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           "Access-Control-Allow-Origin": "*",
@@ -48,7 +47,7 @@ function Login() {
   };
 
   return (
-    <div className='min-h-screen py-14 bg-slate-400'>
+    <div className='min-h-screen py-16 bg-slate-400'>
       <div className="container mx-auto">
         <div className='flex w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden'>
           <div className='w-1/2 bg-gradient-to-bl from-red-900 to-red-700'>
@@ -84,10 +83,6 @@ function Login() {
                 </button>
               </div>
             </form>
-            <div className='text-sm flex mt-16 space-x-2'>
-              <p className='ml-12'>Don’t have an account?</p>
-              <button onClick={() => navigate('/signup')} className='font-semibold'>Signup</button>
-            </div>
           </div>
         </div>
       </div>

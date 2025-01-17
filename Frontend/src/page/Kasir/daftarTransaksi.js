@@ -1,33 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidebar from './leftsidebar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function DaftarTransaksi() {
     const navigate = useNavigate();
+    const [orders, setOrders] = useState([]);
+    const [foodNames, setFoodNames] = useState({});
+    const [drinkNames, setDrinkNames] = useState({});
+    const [error, setError] = useState(null);
 
-    const [orders, setOrders] = useState([
-        {
-            date: '21 September 2024',
-            name: 'Charlotte',
-            menu: 'Charlatte, Coofcim, Cinnamon Roll, Bakso, Lemon Butter Cookies, Caramel Cheese Cake, Indomie, Nasi Goreng',
-            total: 'IDR 0.000',
-            paymentStatus: 'Paid',
-        },
-        {
-            date: '21 September 2024',
-            name: 'Charlotte',
-            menu: 'Coffee, Deserts, Main Course',
-            total: 'IDR 0.000',
-            paymentStatus: 'Paid',
-        },
-        {
-            date: '21 September 2024',
-            name: 'Charlotte',
-            menu: 'Coffee, Deserts, Main Course',
-            total: 'IDR 0.000',
-            paymentStatus: 'Unpaid',
-        },
-    ]);
+    const handleSeeNota = (orderId) => {
+        console.log("Navigating to nota with Order ID:", orderId);
+        navigate('/nota', { state: { orderId } });
+    };
+
+    useEffect(() => {
+        const fetchOrdersAndMenu = async () => {
+            try {
+                const [ordersResponse, foodResponse, drinkResponse] = await Promise.all([
+                    axios.get('https://85c2-180-244-129-91.ngrok-free.app/api/transaction', {
+                        headers: {
+                            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4NjM0NTY1fQ.Lk4PhwN5jsBSJM5Onq19n1NMdEJh-zq_GGeyEtQXUWk',
+                        },
+                    }),
+                    axios.get('https://85c2-180-244-129-91.ngrok-free.app/api/food', {
+                        headers: {
+                            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4NjM0NTY1fQ.Lk4PhwN5jsBSJM5Onq19n1NMdEJh-zq_GGeyEtQXUWk',
+                        },
+                    }),
+                    axios.get('https://85c2-180-244-129-91.ngrok-free.app/api/drink', {
+                        headers: {
+                            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4NjM0NTY1fQ.Lk4PhwN5jsBSJM5Onq19n1NMdEJh-zq_GGeyEtQXUWk',
+                        },
+                    }),
+                ]);
+
+                if (ordersResponse.data.isSuccess) {
+                    setOrders(ordersResponse.data.data);
+                } else {
+                    setOrders([]);
+                }
+
+                const foodMap = foodResponse.data.isSuccess
+                    ? foodResponse.data.data.reduce((acc, item) => {
+                        acc[item.id] = item.name;
+                        return acc;
+                    }, {})
+                    : {};
+                setFoodNames(foodMap);
+
+                const drinkMap = drinkResponse.data.isSuccess
+                    ? drinkResponse.data.data.reduce((acc, item) => {
+                        acc[item.id] = item.name;
+                        return acc;
+                    }, {})
+                    : {};
+                setDrinkNames(drinkMap);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError('Failed to fetch data');
+            }
+        };
+
+        fetchOrdersAndMenu();
+    }, []);
 
     return (
         <>
@@ -37,56 +75,48 @@ function DaftarTransaksi() {
             </div>
             <div className='flex gap-6 bg-white min-h-screen'>
                 <div className="container mx-auto p-1 ml-48">
+                    {error && <div className="text-red-500">{error}</div>}
                     <table className="table-auto w-full text-sm font-light">
                         <thead>
                             <tr className="border-b-2 border-gray-200">
-                                <th className="px-7 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
-                                    DATE
-                                </th>
-                                <th className="px-4 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
-                                    NAME
-                                </th>
-                                <th className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
-                                    MENU
-                                </th>
-                                <th className="px-3 py-4 text-left font-medium text-gray-900 whitespace-nowrap">
-                                    TOTAL
-                                </th>
-                                <th className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap">
-                                    PAYMENT STATUS
-                                </th>
+                                <th className="px-7 py-4 text-left font-medium text-gray-900 whitespace-nowrap">DATE</th>
+                                <th className="px-4 py-4 text-left font-medium text-gray-900 whitespace-nowrap">NAME</th>
+                                <th className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap">MENU</th>
+                                <th className="px-3 py-4 text-left font-medium text-gray-900 whitespace-nowrap">TOTAL</th>
+                                <th className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap">PAYMENT STATUS</th>
                             </tr>
                         </thead>
                         <tbody>
                             {orders.map((order) => (
                                 <tr key={order.id} className="border-b border-gray-200">
-                                    <td className="px-7 py-4 whitespace-nowrap font-normal">{order.date}</td>
-                                    <td className="px-4 py-4 whitespace-nowrap font-normal">{order.name}</td>
+                                    <td className="px-7 py-4 whitespace-nowrap font-normal">{new Date(order.date).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap font-normal">{order.customerName}</td>
                                     <td className="px-6 py-4 whitespace-normal max-w-xs overflow-hidden font-normal">
                                         <div className="overflow-hidden overflow-ellipsis">
-                                            {order.menu}
+                                            {order.items.map(item => {
+                                                const food = item.foodId ? foodNames[item.foodId] : '';
+                                                const drink = item.drinkId ? drinkNames[item.drinkId] : '';
+                                                return `${food ? food : ''} ${drink ? drink : ''}`.trim();
+                                            }).join(', ')}
                                         </div>
                                     </td>
-                                    <td className="px-3 py-4 whitespace-nowrap font-normal">{order.total}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className='text-center'>
-                                            <span
-                                                className={`text-sm font-semibold ${order.paymentStatus === 'Paid'
-                                                    ? 'text-green-500'
-                                                    : 'text-red-500'
-                                                    }`}
-                                            >
-                                                {order.paymentStatus}
-                                            </span>
-                                        </div>
+                                    <td className="px-3 py-4 whitespace-nowrap font-normal">{`IDR ${order.total.toLocaleString()}`}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                                        <span className={`text-sm font-semibold ${order.status === 'paid' ? 'text-green-500' : 'text-red-500'}`}>
+                                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                        </span>
                                     </td>
                                     <td>
-                                        <button
-                                            className="text-sm py-5 text-gray-500 mr-2 underline underline-offset-4"
-                                            onClick={() => navigate('/nota')}
-                                        >
+                                        <Link to={`/nota/${order.id}`}
+                                            className="text-sm py-5 text-gray-500 mr-2 underline underline-offset-4">
                                             See nota
-                                        </button>
+                                        </Link>
+
                                     </td>
                                 </tr>
                             ))}

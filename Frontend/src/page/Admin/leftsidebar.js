@@ -22,7 +22,7 @@ function Leftsidebar() {
             default: '/img/data-user(2).png',  // Gambar default
             active: '/img/data-user.png',     // Gambar aktif
         },
-        dataMakanan: {
+        dataMenu: {
             default: '/img/data-makan(2).png',
             active: '/img/data-makan.png',
         },
@@ -34,7 +34,7 @@ function Leftsidebar() {
 
     const buttons = [
         { name: 'Data User', path: '/dataUser', icon: icons.dataUser },
-        { name: 'Data Makanan', path: '/dataMakanan', icon: icons.dataMakanan },
+        { name: 'Data Menu', path: '/dataMenu', icon: icons.dataMenu },
         { name: 'Data Meja', path: '/dataMeja', icon: icons.dataMeja },
     ];
 
